@@ -29,4 +29,11 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
+
           folder: .
+      - name: Commit config.js
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -f config.js
+          git commit -m "Inject API Key into config.js" || echo "No changes to commit"
