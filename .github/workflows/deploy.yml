@@ -36,4 +36,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -f config.js
-          git commit -m "Inject API Key into config.js" || echo "No changes to commit"
+          git commit -m "Inject API Key into config.js" || true
