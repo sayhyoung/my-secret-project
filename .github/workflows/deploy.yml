@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - master  # 기본 브랜치가 master인 경우. 만약 main이라면 main으로 변경하세요.
+      - master  # 기본 브랜치가 master인 경우, 기본 브랜치가 main이면 main으로 변경
 
 jobs:
   deploy:
@@ -18,22 +18,16 @@ jobs:
           cp config.template.js config.js
           sed -i "s/__API_KEY_PLACEHOLDER__/${{ secrets.API_KEY }}/g" config.js
 
-      - name: Commit config.js
+      - name: Force add and commit config.js
         run: |
+          git config --local advice.addIgnoredFile false
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add config.js
-          git commit -m "Inject API Key into config.js" || echo "No changes to commit"
+          git add -f config.js
+          git commit -m "Inject API Key into config.js" || exit 0
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-
           folder: .
-      - name: Commit config.js
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -f config.js
-          git commit -m "Inject API Key into config.js" || true
